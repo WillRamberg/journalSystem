@@ -1,6 +1,7 @@
 package com.example.journalsystem.Service;
 
 import com.example.journalsystem.Repository.UserRepository;
+import com.example.journalsystem.models.User.Role;
 import com.example.journalsystem.models.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

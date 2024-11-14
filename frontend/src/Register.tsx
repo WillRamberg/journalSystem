@@ -13,7 +13,7 @@ const Register: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/api/users/register', {
+      const response = await fetch('http://localhost:8080/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

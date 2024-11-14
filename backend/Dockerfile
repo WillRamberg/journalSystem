@@ -11,6 +11,10 @@ WORKDIR /app
 
 # Kopiera projektet och bygga backend
 COPY . .
+
+# Gör Maven-wrappern körbar
+RUN chmod +x mvnw
+# Bygg projektet utan att köra tester
 RUN ./mvnw package -DskipTests
 
 # Exponera port 8080
