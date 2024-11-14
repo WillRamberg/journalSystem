@@ -1,20 +1,17 @@
-FROM ubuntu:latest
-LABEL authors="Carlo"
-
-ENTRYPOINT ["top", "-b"]
-
-# Använd en Java-bild som bas
 FROM openjdk:17-jdk-slim
 
-# Ställ in arbetskatalog
 WORKDIR /app
 
-# Kopiera projektet och bygga backend
+# Kopiera alla projektfiler till Docker-kontainern
 COPY . .
+
+# Kontrollera att Maven-wrappern är körbar
+RUN chmod +x mvnw && ls -l mvnw
+
+# Bygg projektet utan att köra tester
+RUN sed 's/\\r$//' ./mvnw > ./mvnw
 RUN ./mvnw package -DskipTests
 
-# Exponera port 8080
 EXPOSE 8080
 
-# Starta applikationen
 CMD ["java", "-jar", "/app/target/journalSystem-0.0.1-SNAPSHOT.jar"]
