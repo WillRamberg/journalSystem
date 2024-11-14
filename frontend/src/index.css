@@ -1,13 +1,44 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+:root {
+  --theme-light: light;
+  --foreground-color-light: #fefefe;
+  --background-color-light: #333;
+
+  --theme-dark: dark;
+  --foreground-color-dark: var(--background-color-light);
+  --background-color-dark: var(--foreground-color-light);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+[data-theme='light'] {
+  --theme: var(--theme-light);
+  --background-color: var(--background-color-light);
+  --foreground-color: var(--foreground-color-light);
+}
+
+[data-theme='dark'] {
+  --theme: var(--theme-dark);
+  --background-color: var(--background-color-dark);
+  --foreground-color: var(--foreground-color-dark);
+}
+
+body {
+  color-scheme: var(--theme);
+  font-family: 'Open Sans', sans-serif;
+  background-color: hsla(240, 7%, 95%, 1);
+  color: var(--foreground-color);
+  padding: 0;
+  margin: 0;
+}
+
+.open-sans-bold {
+  font-family: 'Open Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
 }

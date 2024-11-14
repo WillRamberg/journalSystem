@@ -2,6 +2,7 @@ package com.example.journalsystem.Controllers;
 
 import com.example.journalsystem.Service.UserService;
 import com.example.journalsystem.models.User.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,5 +43,19 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+
+        // Authenticate the user using the service
+        boolean isAuthenticated = userService.authenticateUser(username, password);
+
+        if (isAuthenticated) {
+            return ResponseEntity.ok("Login Successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
+    }
 
 }

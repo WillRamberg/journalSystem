@@ -1,29 +1,30 @@
-# Stage 1: Build the React app
-FROM node:18-alpine AS build
+# Steg 1: Bygg Vite-projektet
+FROM oven/bun:latest AS builder
 
-# Set the working directory
+# Ställ in arbetskatalog
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Kopiera package.json och package-lock.json för att installera beroenden
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Installera beroenden
+RUN bun install
 
-# Copy the rest of the React app's source code
+# Kopiera resten av koden och bygg projektet
 COPY . .
+RUN bun run build
 
-# Build the React app
-RUN npm run build
+# Steg 2: Servera med Nginx
+FROM nginx:latest
 
-# Stage 2: Serve the React app using a lightweight server (nginx)
-FROM nginx:alpine
+# Kopiera byggda filer från "builder"-steget till Nginx
+COPY --from=builder /app/dist/ /usr/share/nginx/html/
 
-# Copy the built files from the first stage to nginx's web directory
-COPY --from=build /app/build /usr/share/nginx/html
+# Kopiera en egen Nginx-konfiguration om du vill (valfritt)
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
-EXPOSE 80
+# Exponera port 3000
+EXPOSE 3000
 
-# Start nginx server
+# Starta Nginx
 CMD ["nginx", "-g", "daemon off;"]
