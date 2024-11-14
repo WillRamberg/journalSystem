@@ -40,4 +40,13 @@ public class UserService {
         }
         return false;
     }
+
+    public boolean registerUser(User user){
+        Optional<User> userOpt = userRepository.findByUsername(user.getUsername());
+        if(userOpt.isPresent())
+            return false;
+
+        userRepository.save(user);
+        return true;
+    }
 }

@@ -1,19 +1,17 @@
-import { useState } from 'react'
-import Login from './Login'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './Login';
+import Register from './Register';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App: React.FC = () => {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path = {"/login"} Component={Login}/>
-        <Route path = {"*"} Component={()=> <h1>404</h1>}/>
+        <Route path="/" element={<Login />} />
+        <Route path="/Register" element={<Register />} />
       </Routes>
-    </BrowserRouter>
-   
-  )
-}
+    </Router>
+  );
+};
 
-export default App
+export default App;
