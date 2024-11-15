@@ -1,5 +1,6 @@
 package com.example.journalsystem.Service;
 
+import com.example.journalsystem.DTO.UserDTO;
 import com.example.journalsystem.Repository.UserRepository;
 import com.example.journalsystem.models.User.Role;
 import com.example.journalsystem.models.User.User;
@@ -34,11 +35,11 @@ public class UserService {
         return userRepository.getUserById(id);
     }
 
-    public boolean registerUser(User user){
-        Optional<User> userOpt = userRepository.findByUsername(user.getUsername());
+    public boolean registerUser(UserDTO userDTO){
+        Optional<User> userOpt = userRepository.findByUsername(userDTO.getUsername());
         if(userOpt.isPresent())
             return false;
-
+        User user = userDTO.DTOtoUser();
         userRepository.save(user);
         return true;
     }
