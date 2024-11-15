@@ -34,18 +34,6 @@ public class UserService {
         return userRepository.getUserById(id);
     }
 
-    public boolean authenticateUser(String username, String password) {
-        // Find user by username
-        Optional<User> userOpt = userRepository.findByUsername(username);
-
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            // Compare the provided password with the stored password
-            return user.getPassword().equals(password);  // This is a simple example; in production, use password hashing
-        }
-        return false;
-    }
-
     public boolean registerUser(User user){
         Optional<User> userOpt = userRepository.findByUsername(user.getUsername());
         if(userOpt.isPresent())

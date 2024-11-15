@@ -11,7 +11,7 @@ const Dashboard: React.FC = () => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {
-      navigate('/login'); // If user is not logged in, redirect to login page
+      navigate('/Login'); // If user is not logged in, redirect to login page
     }
   }, [navigate]);
 
@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
 
       {/* Conditional navigation based on user role */}
       <Box mt={4}>
-        {user?.role === 'doctor' || user?.role === 'staff' ? (
+        {user?.role === 'DOCTOR' || user?.role === 'STAFF' ? (
           <>
             <Button
               variant="contained"
@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
           </>
         ) : null}
 
-        {user?.role === 'doctor' ? (
+        {user?.role === 'DOCTOR' ? (
           <Button
             variant="contained"
             color="primary"
@@ -64,7 +64,7 @@ const Dashboard: React.FC = () => {
           </Button>
         ) : null}
 
-        {user?.role === 'patient' ? (
+        {user?.role === 'PATIENT' ? (
           <>
             <Button
               variant="contained"

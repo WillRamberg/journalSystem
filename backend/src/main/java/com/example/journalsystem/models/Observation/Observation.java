@@ -1,6 +1,5 @@
 package com.example.journalsystem.models.Observation;
 
-import com.example.journalsystem.models.Encounter.Encounter;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -14,8 +13,4 @@ public class Observation {
 
     private String description;
     private LocalDate observationDate;
-
-    @ManyToOne
-    @JoinColumn(name = "encounter_id")
-    private Encounter encounter;
 }
