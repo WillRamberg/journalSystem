@@ -1,5 +1,6 @@
 package com.example.journalsystem.models.Observation;
 
+import com.example.journalsystem.DTO.ObservationDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,4 +17,10 @@ public class Observation {
     private String name;
     private String description;
     private LocalDate observationDate;
+
+    public ObservationDTO ObservationToDTO(){
+        ObservationDTO observationDTO = new ObservationDTO();
+
+        return observationDTO;
+    }
 }
