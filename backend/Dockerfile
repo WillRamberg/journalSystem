@@ -9,7 +9,6 @@ COPY . .
 RUN chmod +x mvnw && ls -l mvnw
 
 # Bygg projektet utan att köra tester
-
 RUN ./mvnw package -DskipTests
 
 EXPOSE 8080
