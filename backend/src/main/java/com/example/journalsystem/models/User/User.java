@@ -19,7 +19,6 @@ public class User {
     private String password;
     private String email;
     private String phoneNr;
-
     @Enumerated(EnumType.STRING)
     private Role role; //PATIENT, DOCTOR, STAFF
 
