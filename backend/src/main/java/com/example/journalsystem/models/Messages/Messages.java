@@ -18,5 +18,4 @@ public class Messages {
     private Long render_id;
     private String message_text;
     private LocalDate sent_date;
-
 }

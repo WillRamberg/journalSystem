@@ -1,7 +1,7 @@
 package com.example.journalsystem.Service;
 
+import com.example.journalsystem.DTO.UserDTO;
 import com.example.journalsystem.Repository.UserRepository;
-import com.example.journalsystem.models.User.Role;
 import com.example.journalsystem.models.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,7 @@ public class UserService {
     }
 
     public Optional<User> findByUsername(String username){
+
         return userRepository.findByUsername(username);
     }
 
@@ -34,7 +35,8 @@ public class UserService {
         return userRepository.getUserById(id);
     }
 
-    public boolean registerUser(User user){
+    public boolean registerUser(UserDTO userDTO){
+        User user = userDTO.DTOtoUser();
         Optional<User> userOpt = userRepository.findByUsername(user.getUsername());
         if(userOpt.isPresent())
             return false;
