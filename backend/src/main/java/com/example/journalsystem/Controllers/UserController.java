@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
+    public ResponseEntity<User> login(@RequestBody User user) {
         String username = user.getUsername();
         String password = user.getPassword();
 
@@ -30,12 +30,13 @@ public class UserController {
         if (foundUser.isPresent()) {
             User currentUser = foundUser.get();
             if (currentUser.getPassword().equals(password)) {
-                return ResponseEntity.status(401).body(currentUser);
+                System.out.println(currentUser);
+                return ResponseEntity.ok(currentUser);
             }
         }
         // Authentication fails, return a JSON object with an error message
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body("{\"message\":\"Invalid username or password\"}");
+                .body(null);
     }
 
     @PostMapping("/register")

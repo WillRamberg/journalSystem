@@ -21,18 +21,13 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
-        console.log("1");
-        // Om inloggning lyckas, hämta användarens data
         const userData = await response.json(); // Förvänta att API:et returnerar användaruppgifter som JSON
-        console.log("2");
         // Lagra användaruppgifterna i localStorage
         localStorage.setItem('user', JSON.stringify(userData));
-        console.log("3");
 
         // Navigera till Home-sidan
-        ()=> navigate('/Home');
+        navigate('/Dashboard');
       } else {
-        console.log("4");
         setMessage('Invalid username or password');
       }
     } catch (error) {
