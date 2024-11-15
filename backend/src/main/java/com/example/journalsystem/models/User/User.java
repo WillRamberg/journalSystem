@@ -17,6 +17,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role; //PATIENT, DOCTOR, STAFF
 
+    public User() {
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -54,6 +58,14 @@ public class User {
     }
 
     public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public User(Long id, String username, String password, String email, Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
         this.role = role;
     }
 }

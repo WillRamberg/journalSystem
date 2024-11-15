@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -21,12 +21,22 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
-        const result = await response.text();
-        setMessage(result); // e.g., "Login Successful"
+        console.log("1");
+        // Om inloggning lyckas, hämta användarens data
+        const userData = await response.json(); // Förvänta att API:et returnerar användaruppgifter som JSON
+        console.log("2");
+        // Lagra användaruppgifterna i localStorage
+        localStorage.setItem('user', JSON.stringify(userData));
+        console.log("3");
+
+        // Navigera till Home-sidan
+        ()=> navigate('/Home');
       } else {
+        console.log("4");
         setMessage('Invalid username or password');
       }
     } catch (error) {
+      console.log("5");
       console.error('Error:', error);
       setMessage('An error occurred');
     }
@@ -68,12 +78,13 @@ const Login: React.FC = () => {
           </Box>
           {message && (
             <Box mb={2}>
+              <Typography color="error">{message}</Typography>
             </Box>
           )}
-          <Button type="submit" variant="contained" color="primary" fullWidth>
+          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mb: 2 }}>
             Login
           </Button>
-          <Button variant="contained" color="primary" fullWidth onClick={() => navigate('/Register')}>
+          <Button variant="outlined" color="secondary" fullWidth onClick={() => navigate('/Register')}>
             Register
           </Button>
         </form>

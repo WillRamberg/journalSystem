@@ -1,6 +1,7 @@
 package com.example.journalsystem.Controllers;
 
 import com.example.journalsystem.Service.UserService;
+import com.example.journalsystem.models.User.Role;
 import com.example.journalsystem.models.User.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,19 +20,24 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody User user) {
         String username = user.getUsername();
         String password = user.getPassword();
 
         // Authenticate the user using the service
-        boolean isAuthenticated = userService.authenticateUser(username, password);
+        Optional<User> foundUser = userService.findByUsername(username);
 
-        if (isAuthenticated) {
-            return ResponseEntity.ok("Login Successful");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        if (foundUser.isPresent()) {
+            User currentUser = foundUser.get();
+            if (currentUser.getPassword().equals(password)) {
+                return ResponseEntity.status(401).body(currentUser);
+            }
         }
+        // Authentication fails, return a JSON object with an error message
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("{\"message\":\"Invalid username or password\"}");
     }
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user){
         boolean isRegistered = userService.registerUser(user);
