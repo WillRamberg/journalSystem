@@ -1,5 +1,6 @@
 package com.example.journalsystem.Controllers;
 
+import com.example.journalsystem.DTO.UserDTO;
 import com.example.journalsystem.Service.UserService;
 import com.example.journalsystem.models.User.Role;
 import com.example.journalsystem.models.User.User;
@@ -19,9 +20,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
-        String username = user.getUsername();
-        String password = user.getPassword();
+    public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO) {
+        String username = userDTO.getUsername();
+        String password = userDTO.getPassword();
 
         // Authenticate the user using the service
         Optional<User> foundUser = userService.findByUsername(username);
@@ -29,8 +30,8 @@ public class UserController {
         if (foundUser.isPresent()) {
             User currentUser = foundUser.get();
             if (currentUser.getPassword().equals(password)) {
-                System.out.println(currentUser);
-                return ResponseEntity.ok(currentUser);
+                UserDTO userDTO1 = currentUser.UserToDTO();
+                return ResponseEntity.ok(userDTO1);
             }
         }
         // Authentication fails, return a JSON object with an error message
@@ -39,8 +40,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user){
-        boolean isRegistered = userService.registerUser(user);
+    public ResponseEntity<String> register(@RequestBody UserDTO userDTO){
+        boolean isRegistered = userService.registerUser(userDTO);
 
         if(isRegistered){
             return ResponseEntity.ok("User registered");
