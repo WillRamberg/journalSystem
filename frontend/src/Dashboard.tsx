@@ -11,7 +11,7 @@ const Dashboard: React.FC = () => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {
-      navigate('/login'); // If user is not logged in, redirect to login page
+      navigate('/Login'); // If user is not logged in, redirect to login page
     }
   }, [navigate]);
 
