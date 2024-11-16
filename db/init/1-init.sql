@@ -22,7 +22,8 @@ CREATE TABLE Conditions (
                             condition_id INT PRIMARY KEY AUTO_INCREMENT,
                             condition_date DATE NOT NULL,
                             condition_name VARCHAR(100) NOT NULL,
-                            condition_description TEXT.
+                            condition_description TEXT,
+                            FOREIGN KEY (user_id) ON DELETE CASCADE
 );
 
 -- Observation-tabellen för observationer under ett patientmöte
@@ -31,6 +32,7 @@ CREATE TABLE Observations (
                               observation_name VARCHAR(100) NOT NULL,
                               obersvation_description TEXT,
                               observation_date DATE NOT NULL,
+                                FOREIGN KEY (user_id) ON DELETE CASCADE,
 );
 
 -- Message-tabellen för meddelanden mellan användare
