@@ -39,6 +39,10 @@ public class UserService {
         return userRepository.getUserById(id);
     }
 
+    public List<User> getDoctorsAndStaff(){
+        return userRepository.findUsersByRoleIn(List.of("DOCTOR", "STAFF"));
+    }
+
     public boolean registerUser(UserDTO userDTO) {
         Optional<User> userOpt = userRepository.findByUsername(userDTO.getUsername());
         if (userOpt.isPresent())

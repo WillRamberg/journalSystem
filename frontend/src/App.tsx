@@ -8,6 +8,7 @@ import Messages from './Messages';
 import Patientinfo from './Patient-info';
 import Patientindex from './Patient-Index';
 import PatientManagement from './Patient-Manage';
+import MessagePage from './MessagePage';
 
 const App: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const App: React.FC = () => {
         <Route path="/Patient-Info" element={<Patientinfo />}/>
         <Route path="/Patient-Index" element={<Patientindex />}/>
         <Route path="/Patient-Manage/:userId" element={<PatientManagement/>}/>
+        <Route path="/MessagePage/:userId" element={<MessagePage/>}/>
       </Routes>
     </Router>
   );
