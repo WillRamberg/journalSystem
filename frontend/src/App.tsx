@@ -6,19 +6,22 @@ import Dashboard from './Dashboard';
 import Diagnosis from './Diagnosis';
 import Messages from './Messages';
 import Patientinfo from './Patient-info';
-import Patientnote from './Patient-note';
+import Patientindex from './Patient-Index';
+import PatientManagement from './Patient-Manage';
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Login/>} />
+        <Route path="/Login" element={<Login/>} />
         <Route path="/Register" element={<Register />} />
         <Route path="/Dashboard" element={<Dashboard />}/>
         <Route path="/Diagnosis" element={<Diagnosis />}/>
         <Route path="/Messages" element={<Messages />}/>
-        <Route path="/Patient-info" element={<Patientinfo />}/>
-        <Route path="/Patient-note" element={<Patientnote />}/>
+        <Route path="/Patient-Info" element={<Patientinfo />}/>
+        <Route path="/Patient-Index" element={<Patientindex />}/>
+        <Route path="/Patient-Manage/:userId" element={<PatientManagement/>}/>
       </Routes>
     </Router>
   );

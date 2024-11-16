@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, IconButton, Button, Drawer, Box, Paper, Typography, Grid, List, ListItem, ListItemText, Container, TextField } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Button, Drawer, Box, Paper, Typography, Grid, List, ListItem, ListItemText, Container } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,10 +8,10 @@ interface NavigationItem {
   route: string;
 }
 
-const Diagnosis: React.FC = () => {
+const PatientIndex: React.FC = () => {
   const [user, setUser] = useState<any>(null); // Use 'any' type for simplicity
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [diagnosis, setDiagnosis] = useState<string>(''); // For storing diagnosis input
+  const [users, setUsers] = useState<any[]>([]);
   const navigate = useNavigate();
 
   // Fetch user information from localStorage
@@ -24,9 +24,19 @@ const Diagnosis: React.FC = () => {
     }
   }, [navigate]);
 
-  if (!user) {
-    return null; // Render nothing if user is not loaded
-  }
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/getAllUsers'); // Replace with your actual API endpoint
+        const data = await response.json();
+        setUsers(data); // Assuming the response is an array of users
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
@@ -38,7 +48,7 @@ const Diagnosis: React.FC = () => {
     if (user?.role === 'DOCTOR' || user?.role === 'STAFF') {
       items.push(
         { text: 'View All Patients', route: '/Patient-Index' },
-        { text: 'View My Information', route: '/Patient-Info' },
+        { text: 'View Patient Information', route: '/Patient-Info' },
         { text: 'View Messages', route: '/Messages' }
       );
     }
@@ -63,9 +73,8 @@ const Diagnosis: React.FC = () => {
     navigate('/Login'); // Redirect to login page
   };
 
-  // Handle diagnosis change
-  const handleDiagnosisChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDiagnosis(event.target.value);
+  const handleViewUser = (userId: number) => {
+    navigate(`/Patient-Manage/${userId}`); // Navigate to user details page with user ID
   };
 
   return (
@@ -77,7 +86,7 @@ const Diagnosis: React.FC = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
-            Create Diagnosis
+            Create Patient Note
           </Typography>
           <Button color="inherit" onClick={handleLogout}>Log Out</Button> {/* Log Out button */}
         </Toolbar>
@@ -87,7 +96,7 @@ const Diagnosis: React.FC = () => {
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <Box role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)} style={{ width: 250 }}>
           <List>
-            {navigationItems().map((item, index) => (
+            {navigationItems().map((item) => (
               <ListItem onClick={() => handleNavigation(item.route)}>
                 <ListItemText primary={item.text} />
               </ListItem>
@@ -96,30 +105,37 @@ const Diagnosis: React.FC = () => {
         </Box>
       </Drawer>
 
-      <Container maxWidth="md">
+        <Container maxWidth="md">
         <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
           <Typography variant="h4" gutterBottom>
-            Create Diagnosis
+            Patient Index
           </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              {/* Diagnosis Input Form */}
-              <TextField
-                label="Diagnosis"
-                multiline
-                rows={4}
-                value={diagnosis}
-                onChange={handleDiagnosisChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} style={{ marginTop: '20px' }}>
-              {/* You can add a submit button here if needed */}
-              <Button variant="contained" color="primary">
-                Save Diagnosis
-              </Button>
-            </Grid>
+
+          {/* Display List of Users */}
+          <Typography variant="h6" style={{ marginTop: '40px' }}>
+            Users:
+          </Typography>
+          <Grid container spacing={2} style={{ marginTop: '20px' }}>
+            {users.map((user) => (
+              <Grid item xs={12} key={user.id}>
+                <Paper elevation={1} style={{ padding: '10px' }}>
+                  <Grid container justifyContent="space-between" alignItems="center">
+                    <Grid item>
+                      <Typography variant="body1">{`${user.first_name} ${user.last_name} (${user.username})`}</Typography>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => handleViewUser(user.id)}
+                      >
+                        View
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </Grid>
+            ))}
           </Grid>
         </Paper>
       </Container>
@@ -127,4 +143,4 @@ const Diagnosis: React.FC = () => {
   );
 };
 
-export default Diagnosis;
+export default PatientIndex;

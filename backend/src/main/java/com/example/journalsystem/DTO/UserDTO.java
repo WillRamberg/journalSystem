@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDTO {
 
-    private Long id;
+    private int id;
     private String username;
     private String social_security;
     private String first_name;
@@ -25,6 +25,7 @@ public class UserDTO {
 
     public User DTOtoUser(){
         User user = new User();
+        user.setId(this.id);
         user.setUsername(this.username);
         user.setSocial_security(this.social_security);
         user.setFirst_name(this.first_name);

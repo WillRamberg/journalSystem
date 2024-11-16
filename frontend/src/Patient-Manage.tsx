@@ -1,41 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, IconButton, Button, Drawer, Box, Paper, Typography, Grid, List, ListItem, ListItemText, Container, TextField } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, IconButton, Button, Drawer, Box, Paper, Typography, CircularProgress, Container, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useNavigate } from 'react-router-dom';
 
 interface NavigationItem {
   text: string;
   route: string;
 }
 
-const Diagnosis: React.FC = () => {
-  const [user, setUser] = useState<any>(null); // Use 'any' type for simplicity
+const PatientManagement: React.FC = () => {
+  const { userId } = useParams(); // Get the userId from the URL
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [diagnosis, setDiagnosis] = useState<string>(''); // For storing diagnosis input
+  const [currentUser, setCurrentUser] = useState<any>(null); // The logged-in user
   const navigate = useNavigate();
 
-  // Fetch user information from localStorage
+  // Fetch logged-in user info
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      setCurrentUser(JSON.parse(storedUser));
     } else {
       navigate('/Login'); // Redirect to login if user is not found
     }
   }, [navigate]);
 
-  if (!user) {
-    return null; // Render nothing if user is not loaded
-  }
+  // Fetch the specific user's details
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/getUserById/${userId}`);
+        const data = await response.json();
+        setUser(data); // Set the user data to the state
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [userId]);
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
 
+  // Navigation items based on user role
   const navigationItems = (): NavigationItem[] => {
     const items: NavigationItem[] = [];
 
-    if (user?.role === 'DOCTOR' || user?.role === 'STAFF') {
+    if (currentUser?.role === 'DOCTOR' || currentUser?.role === 'STAFF') {
       items.push(
         { text: 'View All Patients', route: '/Patient-Index' },
         { text: 'View My Information', route: '/Patient-Info' },
@@ -43,7 +59,7 @@ const Diagnosis: React.FC = () => {
       );
     }
 
-    if (user?.role === 'PATIENT') {
+    if (currentUser?.role === 'PATIENT') {
       items.push(
         { text: 'View My Information', route: '/Patient-info' },
         { text: 'Send Message to Doctor or Staff', route: '/Messages' }
@@ -63,10 +79,9 @@ const Diagnosis: React.FC = () => {
     navigate('/Login'); // Redirect to login page
   };
 
-  // Handle diagnosis change
-  const handleDiagnosisChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDiagnosis(event.target.value);
-  };
+  if (loading) {
+    return <CircularProgress />; // Loading indicator while fetching user data
+  }
 
   return (
     <>
@@ -77,7 +92,7 @@ const Diagnosis: React.FC = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
-            Create Diagnosis
+            User Details
           </Typography>
           <Button color="inherit" onClick={handleLogout}>Log Out</Button> {/* Log Out button */}
         </Toolbar>
@@ -87,8 +102,8 @@ const Diagnosis: React.FC = () => {
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <Box role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)} style={{ width: 250 }}>
           <List>
-            {navigationItems().map((item, index) => (
-              <ListItem onClick={() => handleNavigation(item.route)}>
+            {navigationItems().map((item) => (
+              <ListItem key={item.route} onClick={() => handleNavigation(item.route)}>
                 <ListItemText primary={item.text} />
               </ListItem>
             ))}
@@ -98,33 +113,22 @@ const Diagnosis: React.FC = () => {
 
       <Container maxWidth="md">
         <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
-          <Typography variant="h4" gutterBottom>
-            Create Diagnosis
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              {/* Diagnosis Input Form */}
-              <TextField
-                label="Diagnosis"
-                multiline
-                rows={4}
-                value={diagnosis}
-                onChange={handleDiagnosisChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} style={{ marginTop: '20px' }}>
-              {/* You can add a submit button here if needed */}
-              <Button variant="contained" color="primary">
-                Save Diagnosis
-              </Button>
-            </Grid>
-          </Grid>
+          {user ? (
+            <>
+              <Typography variant="h4" gutterBottom>
+                {`${user.first_name} ${user.last_name}`}
+              </Typography>
+              <Typography variant="h6">{`Username: ${user.username}`}</Typography>
+              <Typography variant="body1">{`Email: ${user.email}`}</Typography>
+              <Typography variant="body1">{`Role: ${user.role}`}</Typography>
+            </>
+          ) : (
+            <Typography variant="body1">User not found</Typography>
+          )}
         </Paper>
       </Container>
     </>
   );
 };
 
-export default Diagnosis;
+export default PatientManagement;

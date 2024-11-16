@@ -50,4 +50,21 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists or couldn't be registered");
     }
 
+    @GetMapping("/getAllUsers")
+    public List<UserDTO> getAllUsers(){
+        List<User> users = userService.getAllUsers();
+        return users.stream().map(User::UserToDTO).toList();
+    }
+
+    @GetMapping("/getUserById/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
+        Optional<User> user = userService.findById(id);
+
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get().UserToDTO()); // Assuming you have UserToDTO method
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
 }

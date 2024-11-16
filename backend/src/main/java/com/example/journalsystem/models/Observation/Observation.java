@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "Observations")
 @Data
-@NoArgsConstructor
-@Table(name ="Observations")
 public class Observation {
 
     @Id
@@ -27,7 +26,7 @@ public class Observation {
     @JoinColumn(name = "user_id", nullable = false) // Definierar foreign key
     private User user;
 
-    public ObservationDTO ObservationToDTO(){
+    public ObservationDTO ObservationToDTO() {
         ObservationDTO observationDTO = new ObservationDTO();
         observationDTO.setId(this.id);
         observationDTO.setName(this.name);

@@ -19,25 +19,29 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user){
+    public User createUser(User user) {
         return userRepository.save(user);
     }
 
-    public Optional<User> findByUsername(String username){
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    public List<User> getUserByEmail(String email){
+    public List<User> getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
     }
 
-    public Optional<User> getUserById(Long id){
+    public Optional<User> getUserById(int id) {
         return userRepository.getUserById(id);
     }
 
-    public boolean registerUser(UserDTO userDTO){
+    public boolean registerUser(UserDTO userDTO) {
         Optional<User> userOpt = userRepository.findByUsername(userDTO.getUsername());
-        if(userOpt.isPresent())
+        if (userOpt.isPresent())
             return false;
         User user = userDTO.DTOtoUser();
         userRepository.save(user);
