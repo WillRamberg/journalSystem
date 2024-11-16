@@ -58,7 +58,7 @@ public class UserController {
 
     @GetMapping("/getUserById/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
-        Optional<User> user = userService.findById(id);
+        Optional<User> user = userService.getUserById(id);
 
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get().UserToDTO()); // Assuming you have UserToDTO method

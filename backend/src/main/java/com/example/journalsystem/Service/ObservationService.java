@@ -21,12 +21,12 @@ public class ObservationService {
         this.userRepository = userRepository;
         this.observationRepository = observationRepository;
     }
-    public List<Observation> getAllObservationsById(Long id){
+    public List<Observation> getAllObservationsById(int id){
         return observationRepository.getAllObservationsById(id);
 
     }
     public ObservationDTO saveObservation(ObservationDTO observationDTO){
-        User user = userRepository.findById(observationDTO.getUserId()).orElseThrow(()-> new RuntimeException("User not found saveObservation"));
+        User user = userRepository.getUserById(observationDTO.getUserId()).orElseThrow(()-> new RuntimeException("User not found saveObservation"));
 
         Observation observation = new Observation();
         observation.setName(observationDTO.getName());

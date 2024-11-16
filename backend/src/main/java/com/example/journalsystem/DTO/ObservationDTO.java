@@ -16,11 +16,11 @@ public class ObservationDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String name;
     private String description;
     private LocalDate observationDate;
-    private Long userId;
+    private int userId;
 
     public Observation DTOtoObservation(){
         Observation observation = new Observation();
