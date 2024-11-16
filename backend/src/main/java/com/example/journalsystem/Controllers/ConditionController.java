@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/conditions")
 public class ConditionController {
     private final ConditionServices conditionServices;
     @Autowired
@@ -19,11 +18,7 @@ public class ConditionController {
     }
     @GetMapping("getConditionsByUserId/{userId}")
     public ResponseEntity<List<ConditionDTO>> getConditionsByUserId(@PathVariable int userId){
-        List<ConditionDTO> conditionDTOList = conditionServices.getAllConditionsById(userId).stream().map((Condition c)->{
-            return new ConditionDTO(c.getId(),c.getName(),c.getDescription(),c.getDate(),c.getUser().UserToDTO());
-                }
-
-        ).toList();
+        List<ConditionDTO> conditionDTOList = conditionServices.getAllConditionsById(userId).stream().map(Condition::ConditionToDTO).toList();
         if(conditionDTOList.isEmpty()){
             return ResponseEntity.noContent().build();
         }

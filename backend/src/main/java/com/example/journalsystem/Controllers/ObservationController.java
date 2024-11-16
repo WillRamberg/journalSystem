@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/observations")
 public class ObservationController {
 
     private final ObservationService observationService;
@@ -22,10 +21,10 @@ public class ObservationController {
 
     @GetMapping("/getObservationsByUserId/{userId}")
     public ResponseEntity<List<ObservationDTO>> getObservationsByUserId(@PathVariable int userId) {
-        List<ObservationDTO> observationsList = observationService.getAllObservationsById(userId).stream().map((Observation o)->{
-            return new ObservationDTO(o.getId(),o.getName(),o.getDescription(),o.getObservationDate(),o.getUser().UserToDTO());
-        }
-        ).toList();
+        List<ObservationDTO> observationsList = observationService.getAllObservationsById(userId).stream().map(Observation::ObservationToDTO).toList();
+
+
+
         if(observationsList.isEmpty()){
             return ResponseEntity.noContent().build();
         }
