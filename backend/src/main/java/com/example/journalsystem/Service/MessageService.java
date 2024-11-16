@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,6 @@ public class MessageService {
             User sender = senderOPT.get();
             User receiver = receiverOPT.get();
             List<Message> messages = messageRepository.findBySenderAndReceiverOrReceiverAndSender(sender.getId(), receiver.getId());
-            System.out.println(messages);
             return messages;
         }
         return null;
@@ -38,7 +38,7 @@ public class MessageService {
         User receiver = userService.getUserById(messageDTO.getReceiverId()).get();
 
         Message message = messageDTO.toEntity(sender, receiver);
-        message.setSent_date(LocalDate.now());
+        message.setSent_date(LocalDateTime.now());
         return messageRepository.save(message);
     }
 }

@@ -124,12 +124,12 @@ const Messages: React.FC = () => {
       <Container maxWidth="md">
         <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
           <Typography variant="h4" gutterBottom>
-            Users List
+            Select someone to message!
           </Typography>
 
           {/* Display List of Users */}
           <Typography variant="h6" style={{ marginTop: '40px' }}>
-            Users:
+            All users:
           </Typography>
           <Grid container spacing={2} style={{ marginTop: '20px' }}>
             {users.map((user) => (
@@ -137,7 +137,7 @@ const Messages: React.FC = () => {
                 <Paper elevation={1} style={{ padding: '10px' }}>
                   <Grid container justifyContent="space-between" alignItems="center">
                     <Grid item>
-                      <Typography variant="body1">{`${user.first_name} ${user.last_name} (${user.username})`}</Typography>
+                      <Typography variant="body1">{`${user.first_name} ${user.last_name} (${user.role})`}</Typography>
                     </Grid>
                     <Grid item>
                       <Button

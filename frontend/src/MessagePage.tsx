@@ -14,7 +14,7 @@ interface Message {
   senderUsername: string;
   receiverUsername: string;
   message_text: string;
-  sent_date: string;
+  sentDate: string;
 }
 
 const MessagePage: React.FC = () => {
@@ -46,6 +46,7 @@ const MessagePage: React.FC = () => {
       try {
         const response = await fetch(`http://localhost:8080/getMessagesBetweenUsers/${user?.id}/${parsedUserId}`);
         const data = await response.json();
+        
   
         // Ensure that data is an array
         if (Array.isArray(data)) {
@@ -87,6 +88,7 @@ const MessagePage: React.FC = () => {
         setNewMessage(''); // Clear input
         const updatedMessages = await response.json();
         setMessages(updatedMessages);
+        navigate(0);
       } else {
         console.error('Error sending message');
       }
@@ -180,7 +182,14 @@ const MessagePage: React.FC = () => {
                   {message.message_text}
                 </Typography>
                 <Typography variant="caption" color="textSecondary">
-                  {new Date(message.sent_date).toLocaleString()}
+                {new Date(message.sentDate).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false // Use 24-hour format, set to true for 12-hour format
+})}
                 </Typography>
               </Paper>
             ))}
@@ -192,7 +201,7 @@ const MessagePage: React.FC = () => {
             variant="outlined"
             fullWidth
             multiline
-            rows={4}
+            rows={1}
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
           />

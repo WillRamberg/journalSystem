@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name ="messages")
@@ -25,7 +26,7 @@ public class Message {
     private User receiver;
 
     private String message_text;
-    private LocalDate sent_date;
+    private LocalDateTime sent_date;
 
     // Method to convert Message entity to MessageDTO
     public MessageDTO MessageToDTO() {
