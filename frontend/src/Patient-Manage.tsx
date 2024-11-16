@@ -16,6 +16,9 @@ const PatientManagement: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<any>(null); // The logged-in user
   const navigate = useNavigate();
 
+  const [observations, setObservations] = useState([]);
+  const [conditions, setConditions] = useState([]);
+
   // Fetch logged-in user info
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -42,6 +45,36 @@ const PatientManagement: React.FC = () => {
 
     fetchUser();
   }, [userId]);
+
+  useEffect(() => {
+    const fetchObservations = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/getObservationsByUserId/${userId}`);
+        const data = await response.json();
+        setObservations(data); // Sätt observationerna i state
+      } catch (error) {
+        console.error('Error fetching observations:', error);
+      }
+    };
+
+    fetchObservations();
+  }, [userId]);
+
+
+  useEffect(() => {
+    const fetchConditions = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/getConditionsByUserId/${userId}`);
+        const data = await response.json();
+        setConditions(data); // Sätt conditions i state
+      } catch (error) {
+        console.error('Error fetching conditions:', error);
+      }
+    };
+
+    fetchConditions();
+  }, [userId]);
+
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
@@ -127,6 +160,17 @@ const PatientManagement: React.FC = () => {
           )}
         </Paper>
       </Container>
+      <Box display="flex" justifyContent="space-between" marginTop="20px">
+        <Typography variant="h5" gutterBottom>
+          Observations
+          <Paper style={{ padding: '10px' }}>
+          </Paper>
+          <List>
+            {observations}
+          </List>
+        </Typography>
+      </Box>
+
     </>
   );
 };
