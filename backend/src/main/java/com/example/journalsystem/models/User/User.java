@@ -6,12 +6,12 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name ="Users")
+@Table(name ="users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String username;
     private String social_security;
     private String first_name;
@@ -26,6 +26,7 @@ public class User {
 
     public UserDTO UserToDTO(){
         UserDTO userDTO = new UserDTO();
+        userDTO.setId(this.id);
         userDTO.setUsername(this.username);
         userDTO.setSocial_security(this.social_security);
         userDTO.setFirst_name(this.first_name);

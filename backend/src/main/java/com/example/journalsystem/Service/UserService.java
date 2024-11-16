@@ -23,6 +23,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
+    }
+
     public Optional<User> findByUsername(String username){
         return userRepository.findByUsername(username);
     }
@@ -31,7 +35,7 @@ public class UserService {
         return userRepository.getUserByEmail(email);
     }
 
-    public Optional<User> getUserById(int id){
+    public Optional<User> findById(int id){
         return userRepository.getUserById(id);
     }
 
