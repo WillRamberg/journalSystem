@@ -26,7 +26,7 @@ public class ObservationService {
 
     }
     public ObservationDTO saveObservation(ObservationDTO observationDTO){
-        User user = userRepository.getUserById(observationDTO.getUserId()).orElseThrow(()-> new RuntimeException("User not found saveObservation"));
+        User user = userRepository.getUserById(observationDTO.getUser().getId()).orElseThrow(()-> new RuntimeException("User not found saveObservation"));
 
         Observation observation = new Observation();
         observation.setName(observationDTO.getName());
@@ -41,6 +41,6 @@ public class ObservationService {
                 observationSave.getName(),
                 observationSave.getDescription(),
                 observationSave.getObservationDate(),
-                observationSave.getUser().getId());
+                observationSave.getUser().UserToDTO());
     }
 }

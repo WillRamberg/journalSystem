@@ -8,27 +8,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ObservationDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int id;
     private String name;
     private String description;
     private LocalDate observationDate;
-    private int userId;
 
+
+    private UserDTO user;
     public Observation DTOtoObservation(){
         Observation observation = new Observation();
         observation.setId(this.id);
         observation.setName(this.name);
         observation.setDescription(this.description);
         observation.setObservationDate(this.observationDate);
-        observation.setUserId(this.userId);
+        observation.setUser(user.DTOtoUser());
         return observation;
     }
 }

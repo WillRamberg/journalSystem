@@ -20,10 +20,9 @@ public class Observation {
     private String name;
     private String description;
     private LocalDate observationDate;
-    private int userId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false) // Definierar foreign key
+    @JoinColumn(name = "user_id") // Definierar foreign key
     private User user;
 
     public ObservationDTO ObservationToDTO() {
@@ -32,7 +31,7 @@ public class Observation {
         observationDTO.setName(this.name);
         observationDTO.setDescription(this.description);
         observationDTO.setObservationDate(this.observationDate);
-        observationDTO.setUserId(this.user.getId());
+        observationDTO.setUser(this.user.UserToDTO());
         return observationDTO;
     }
 }

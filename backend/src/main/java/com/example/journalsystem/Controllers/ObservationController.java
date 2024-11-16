@@ -23,7 +23,7 @@ public class ObservationController {
     @GetMapping("/getObservationsByUserId")
     public ResponseEntity<List<ObservationDTO>> getObservationsByUserId(@PathVariable int userId) {
         List<ObservationDTO> observationsList = observationService.getAllObservationsById(userId).stream().map((Observation o)->{
-            return new ObservationDTO(o.getId(),o.getName(),o.getDescription(),o.getObservationDate(),o.getUser().getId());
+            return new ObservationDTO(o.getId(),o.getName(),o.getDescription(),o.getObservationDate(),o.getUser().UserToDTO());
         }
         ).toList();
         return ResponseEntity.ok(observationsList);

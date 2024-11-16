@@ -82,7 +82,7 @@ const PatientInfoPage: React.FC = () => {
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <Box role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)} style={{ width: 250 }}>
           <List>
-            {navigationItems().map((item, index) => (
+            {navigationItems().map((item) => (
               <ListItem onClick={() => handleNavigation(item.route)}>
                 <ListItemText primary={item.text} />
               </ListItem>

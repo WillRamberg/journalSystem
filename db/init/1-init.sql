@@ -23,6 +23,7 @@ CREATE TABLE Conditions (
                             condition_date DATE NOT NULL,
                             condition_name VARCHAR(100) NOT NULL,
                             condition_description TEXT,
+                            user_id INT NOT NULL,
                             FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
 );
 
@@ -32,6 +33,7 @@ CREATE TABLE Observations (
                               observation_name VARCHAR(100) NOT NULL,
                               obersvation_description TEXT,
                               observation_date DATE NOT NULL,
+                                user_id INT NOT NULL,
                               FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
 );
 
