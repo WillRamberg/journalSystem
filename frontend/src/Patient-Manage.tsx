@@ -16,7 +16,7 @@ interface Condition {
   id: number;
   name: string;
   description: string;
-  diagnosisDate: string;
+  conditionDate: string;
 }
 
 // Define the NavigationItem interface
@@ -32,7 +32,7 @@ const PatientManagement: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null); // The logged-in user
   const [newObservation, setNewObservation] = useState({ name: '', description: '', observationDate: '' });
-  const [newCondition, setNewCondition] = useState({ name: '', description: '', diagnosisDate: '' });
+  const [newCondition, setNewCondition] = useState({ name: '', description: '', conditionDate: '' });
   const navigate = useNavigate();
 
   // Fetch logged-in user info
@@ -155,7 +155,7 @@ const PatientManagement: React.FC = () => {
       if (response.ok) {
         const newCond = await response.json();
         setConditions((prev) => [...prev, newCond]); // Update the conditions list
-        setNewCondition({ name: '', description: '', diagnosisDate: '' }); // Clear the form
+        setNewCondition({ name: '', description: '', conditionDate: '' }); // Clear the form
       } else {
         console.error('Error adding condition');
       }
@@ -267,7 +267,7 @@ const PatientManagement: React.FC = () => {
                     <Typography variant="h6">{cond.name}</Typography>
                     <Typography variant="body2">{cond.description}</Typography>
                     <Typography variant="caption" color="textSecondary">
-                      Diagnosis Date: {new Date(cond.diagnosisDate).toLocaleDateString()}
+                      Condition Date: {new Date(cond.conditionDate).toLocaleDateString()}
                     </Typography>
                   </Paper>
                 ))
