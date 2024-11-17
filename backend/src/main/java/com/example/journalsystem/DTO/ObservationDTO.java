@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,8 +19,8 @@ public class ObservationDTO {
     private int id;
     private String name;
     private String description;
-    private LocalDate observationDate;
-
+    private LocalDateTime observationDate;
+    private int userId;
 
     private UserDTO user;
     public Observation DTOtoObservation(){
@@ -27,7 +29,7 @@ public class ObservationDTO {
         observation.setName(this.name);
         observation.setDescription(this.description);
         observation.setObservationDate(this.observationDate);
-        observation.setUser(user.DTOtoUser());
+        observation.setUser(this.user.DTOtoUser());
         return observation;
     }
 }

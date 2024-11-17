@@ -1,16 +1,43 @@
-INSERT INTO Users (username, social_security, first_name, last_name, gender, pass, email, phoneNr, user_role)
-VALUES 
-('johndoe', '123456-7890', 'John', 'Doe', 'Male', 'password123', 'john.doe@example.com', '123456789', 'PATIENT'),
-('janedoe', '098765-4321', 'Jane', 'Doe', 'Female', 'password123', 'jane.doe@example.com', '987654321', 'DOCTOR');
+CREATE DATABASE IF NOT EXISTS journalsystem;
+USE journalsystem;
 
--- Lägg till initiala diagnoser
-INSERT INTO Conditions (condition_date, condition_name, condition_description, user_id)
-VALUES 
-('2024-01-01', 'Hypertension', 'High blood pressure detected.', 1),
-('2024-01-02', 'Diabetes', 'Type 2 diabetes diagnosis.', 2);
-
--- Lägg till initiala observationer
-INSERT INTO Observations (observation_name, obersvation_description, observation_date, user_id)
-VALUES 
-('Blood Pressure Check', 'Patient had elevated blood pressure.', '2024-01-01', 1),
-('Blood Sugar Level', 'Patient showed high glucose levels.', '2024-01-02', 2);
+CREATE TABLE Users (
+                        user_id INT PRIMARY KEY AUTO_INCREMENT,
+                        username VARCHAR(50) UNIQUE NOT NULL,
+                        social_security VARCHAR(50) NOT NULL,
+                        first_name VARCHAR(50) NOT NULL,
+                        last_name VARCHAR(50) NOT NULL,
+                        gender VARCHAR(50) NOT NULL,
+                        pass VARCHAR(255) NOT NULL,
+                        email VARCHAR(255) NOT NULL ,
+                        phoneNr VARCHAR(100),
+                        user_role VARCHAR(50) DEFAULT ("PATIENT"),
+);
+-- Condition-tabellen för diagnoser
+CREATE TABLE Conditions (
+                            condition_id INT PRIMARY KEY AUTO_INCREMENT,
+                            condition_date DATE NOT NULL,
+                            condition_name VARCHAR(100) NOT NULL,
+                            condition_description TEXT,
+                            user_id INT NOT NULL,
+                            FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+);
+-- Observation-tabellen för observationer under ett patientmöte
+CREATE TABLE Observations (
+                              observation_id INT PRIMARY KEY AUTO_INCREMENT,
+                              observation_name VARCHAR(100) NOT NULL,
+                              obersvation_description TEXT,
+                              observation_date DATE NOT NULL,
+                                user_id INT NOT NULL,
+                              FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+);
+-- Message-tabellen för meddelanden mellan användare
+CREATE TABLE Messages (
+                          message_id INT PRIMARY KEY AUTO_INCREMENT,
+                          sender_id INT NOT NULL,
+                          receiver_id INT NOT NULL,
+                          message_text TEXT NOT NULL,
+                          sent_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          FOREIGN KEY (sender_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+                          FOREIGN KEY (receiver_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);

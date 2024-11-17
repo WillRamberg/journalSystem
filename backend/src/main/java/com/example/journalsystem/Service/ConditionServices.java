@@ -1,6 +1,7 @@
 package com.example.journalsystem.Service;
 
 import com.example.journalsystem.DTO.ConditionDTO;
+import com.example.journalsystem.DTO.UserDTO;
 import com.example.journalsystem.Repository.ConditionRepository;
 import com.example.journalsystem.Repository.UserRepository;
 import com.example.journalsystem.models.Condition.Condition;
@@ -8,6 +9,7 @@ import com.example.journalsystem.models.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Service
 public class ConditionServices {
@@ -19,23 +21,21 @@ public class ConditionServices {
         this.userRepository = userRepository;
     }
     public List<Condition> getAllConditionsById(int id){
-        return conditionRepository.getAllConditionsById(id);
+        return conditionRepository.getAllConditionsByuser_id(id);
     }
     public ConditionDTO saveCondition(ConditionDTO conditionDTO){
+        UserDTO userDTO = userRepository.getUserById(conditionDTO.getUserId()).get().UserToDTO();
+        conditionDTO.setUser(userDTO);
+        Condition condition = conditionDTO.DTOtoCondition();
+        condition.setDate(LocalDateTime.now());
+        condition = conditionRepository.save(condition);
 
-        User user = userRepository.getUserById(conditionDTO.getUser().getId()).orElseThrow(()-> new RuntimeException("User not found saveCondition"));
-
-        Condition condition = new Condition();
-        condition.setName(conditionDTO.getName());
-        condition.setDescription(conditionDTO.getDescription());
-        condition.setDate(conditionDTO.getDate());
-        condition.setUser(user);
-
-        Condition conditionSave = conditionRepository.save(condition);
-        return new ConditionDTO(conditionSave.getId(),
-                conditionSave.getName(),
-                conditionSave.getDescription(),
-                conditionSave.getDate(),
-                conditionSave.getUser().UserToDTO());
+        return new ConditionDTO(
+                condition.getId(),
+                condition.getName(),
+                condition.getDescription(),
+                condition.getDate(),
+                condition.getUser().getId(),
+                condition.getUser().UserToDTO());
     }
 }
