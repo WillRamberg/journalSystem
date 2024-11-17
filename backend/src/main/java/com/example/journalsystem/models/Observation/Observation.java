@@ -8,9 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Observations")
+@Table(name = "observations")
 @Data
 public class Observation {
 
@@ -19,19 +20,20 @@ public class Observation {
     private int id;
     private String name;
     private String description;
-    private LocalDate observationDate;
+    private LocalDateTime observationDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id") // Definierar foreign key
     private User user;
 
-    public ObservationDTO ObservationToDTO() {
+    public ObservationDTO ObservationToDTO(User user) {
         ObservationDTO observationDTO = new ObservationDTO();
         observationDTO.setId(this.id);
         observationDTO.setName(this.name);
         observationDTO.setDescription(this.description);
+        observationDTO.setUserId(user.getId());
         observationDTO.setObservationDate(this.observationDate);
-        observationDTO.setUser(this.user.UserToDTO());
+        observationDTO.setUser(user.UserToDTO());
         return observationDTO;
     }
 }

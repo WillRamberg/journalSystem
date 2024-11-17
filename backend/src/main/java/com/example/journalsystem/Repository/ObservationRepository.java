@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface ObservationRepository extends JpaRepository<Observation, Long> {
 
-    List<Observation> getAllObservationsById(int id);
+    List<Observation> getAllObservationsByuser_id(int id);
 
 }

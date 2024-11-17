@@ -1,4 +1,11 @@
 package com.example.journalsystem.Repository;
 
-public interface ConditionRepository {
+import com.example.journalsystem.models.Condition.Condition;
+import com.example.journalsystem.models.Observation.Observation;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface ConditionRepository extends JpaRepository<Condition,Long> {
+    List<Condition> getAllConditionsByuser_id(int id);
 }

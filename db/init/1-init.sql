@@ -1,9 +1,6 @@
 CREATE DATABASE IF NOT EXISTS journalsystem;
-
 USE journalsystem;
 
-
--- Användare-tabellen för inloggning och rollhantering
 CREATE TABLE Users (
                         user_id INT PRIMARY KEY AUTO_INCREMENT,
                         username VARCHAR(50) UNIQUE NOT NULL,
@@ -16,7 +13,6 @@ CREATE TABLE Users (
                         phoneNr VARCHAR(100),
                         user_role VARCHAR(50) DEFAULT ("PATIENT"),
 );
-
 -- Condition-tabellen för diagnoser
 CREATE TABLE Conditions (
                             condition_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -26,7 +22,6 @@ CREATE TABLE Conditions (
                             user_id INT NOT NULL,
                             FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
 );
-
 -- Observation-tabellen för observationer under ett patientmöte
 CREATE TABLE Observations (
                               observation_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -36,7 +31,6 @@ CREATE TABLE Observations (
                                 user_id INT NOT NULL,
                               FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
 );
-
 -- Message-tabellen för meddelanden mellan användare
 CREATE TABLE Messages (
                           message_id INT PRIMARY KEY AUTO_INCREMENT,
