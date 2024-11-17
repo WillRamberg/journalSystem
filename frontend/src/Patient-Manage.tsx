@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, Button, Drawer, Box, Paper, Typography, Container, Grid, List, ListItem, ListItemText, TextField } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, IconButton, Button, Drawer, Box, Paper, Typography, Container, Grid, TextField, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 // Define the Observation interface
@@ -26,7 +26,9 @@ interface NavigationItem {
 }
 
 const PatientManagement: React.FC = () => {
+  const { userId } = useParams<{ userId: string }>(); // Get the clicked patient ID from the URL
   const [user, setUser] = useState<any>(null);
+  const [patient, setPatient] = useState<any>(null); // State for the patient data
   const [observations, setObservations] = useState<Observation[]>([]); // State for observations
   const [conditions, setConditions] = useState<Condition[]>([]); // State for conditions
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -48,12 +50,28 @@ const PatientManagement: React.FC = () => {
     }
   }, [navigate]);
 
+
+  // Fetch patient data based on the clicked ID
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/getUserById/${userId}`);
+        const data = await response.json();
+        setPatient(data); // Set the patient data to the state
+      } catch (error) {
+        console.error('Error fetching patient details:', error);
+      }
+    };
+
+    fetchPatient();
+  }, [userId]);
+
   // Fetch observations and conditions for the specific user
   useEffect(() => {
     const fetchObservations = async () => {
-      if (currentUser && currentUser.id) {
+      if (currentUser && userId) {
         try {
-          const response = await fetch(`http://localhost:8080/getObservationsByUserId/${currentUser.id}`);
+          const response = await fetch(`http://localhost:8080/getObservationsByUserId/${userId}`);
           const data = await response.json();
           setObservations(data); // Set the observations data to the state
         } catch (error) {
@@ -63,9 +81,9 @@ const PatientManagement: React.FC = () => {
     };
 
     const fetchConditions = async () => {
-      if (currentUser && currentUser.id) {
+      if (currentUser && userId) {
         try {
-          const response = await fetch(`http://localhost:8080/getConditionsByUserId/${currentUser.id}`);
+          const response = await fetch(`http://localhost:8080/getConditionsByUserId/${userId}`);
           const data = await response.json();
           setConditions(data); // Set the conditions data to the state
         } catch (error) {
@@ -122,8 +140,7 @@ const PatientManagement: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...newObservation,
-          userId: currentUser.id, // Attach the logged-in user's ID to the new observation
+          userId // Logged-in user's ID
         }),
       });
 
@@ -147,8 +164,7 @@ const PatientManagement: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...newCondition,
-          userId: currentUser.id, // Attach the logged-in user's ID to the new condition
+          userId
         }),
       });
 
@@ -230,7 +246,7 @@ const PatientManagement: React.FC = () => {
               ) : (
                 <Typography variant="body1">No observations found.</Typography>
               )}
-              
+
               <Typography variant="h4" gutterBottom>Add New Observation</Typography>
               <TextField
                 label="Name"
@@ -250,7 +266,7 @@ const PatientManagement: React.FC = () => {
                 value={newObservation.description}
                 onChange={(e) => setNewObservation({ ...newObservation, description: e.target.value })}
               />
-              
+
               <Button variant="contained" color="primary" onClick={handleAddObservation}>
                 Add Observation
               </Button>
@@ -274,7 +290,7 @@ const PatientManagement: React.FC = () => {
               ) : (
                 <Typography variant="body1">No conditions found.</Typography>
               )}
-              
+
               <Typography variant="h4" gutterBottom>Add New Condition</Typography>
               <TextField
                 label="Name"
@@ -294,7 +310,7 @@ const PatientManagement: React.FC = () => {
                 value={newCondition.description}
                 onChange={(e) => setNewCondition({ ...newCondition, description: e.target.value })}
               />
-              
+
               <Button variant="contained" color="primary" onClick={handleAddCondition}>
                 Add Condition
               </Button>
