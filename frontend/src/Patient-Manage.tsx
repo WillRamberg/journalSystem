@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton, Button, Drawer, Box, Paper, Typography, Container, Grid, List, ListItem, ListItemText, TextField } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -27,6 +27,8 @@ interface NavigationItem {
 
 const PatientManagement: React.FC = () => {
   const [user, setUser] = useState<any>(null);
+  const { userId } = useParams<{ userId: string }>(); // userId is a string or undefined
+  const parsedUserId = parseInt(userId ?? '0', 10);
   const [observations, setObservations] = useState<Observation[]>([]); // State for observations
   const [conditions, setConditions] = useState<Condition[]>([]); // State for conditions
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -41,19 +43,40 @@ const PatientManagement: React.FC = () => {
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       parsedUser.id = parseInt(parsedUser.id, 10); // Ensure userId is an integer
-      setCurrentUser(parsedUser);
       setUser(parsedUser);
     } else {
       navigate('/Login'); // Redirect to login if user is not found
     }
   }, [navigate]);
 
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (parsedUserId) {
+        try {
+          // Use template literal here
+          const response = await fetch(`http://localhost:8080/getUserById/${parsedUserId}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch user data');
+          }
+          const data = await response.json();
+          setCurrentUser(data); // Set the user data to the state
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      } else {
+        navigate('/Login'); // Redirect to login if no userId in the URL
+      }
+    };
+    
+    fetchUserDetails();
+}, [navigate, parsedUserId]);
+
   // Fetch observations and conditions for the specific user
   useEffect(() => {
     const fetchObservations = async () => {
       if (currentUser && currentUser.id) {
         try {
-          const response = await fetch(`http://localhost:8080/getObservationsByUserId/${currentUser.id}`);
+          const response = await fetch(`http://localhost:8080/getObservationsByUserId/${parsedUserId}`);
           const data = await response.json();
           setObservations(data); // Set the observations data to the state
         } catch (error) {
@@ -65,7 +88,7 @@ const PatientManagement: React.FC = () => {
     const fetchConditions = async () => {
       if (currentUser && currentUser.id) {
         try {
-          const response = await fetch(`http://localhost:8080/getConditionsByUserId/${currentUser.id}`);
+          const response = await fetch(`http://localhost:8080/getConditionsByUserId/${parsedUserId}`);
           const data = await response.json();
           setConditions(data); // Set the conditions data to the state
         } catch (error) {
@@ -195,14 +218,14 @@ const PatientManagement: React.FC = () => {
       {/* User Details Container */}
       <Container maxWidth="md">
         <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
-          {user ? (
+          {currentUser ? (
             <>
               <Typography variant="h4" gutterBottom>
-                {`${user.first_name} ${user.last_name}`}
+                {`${currentUser.first_name} ${currentUser.last_name}`}
               </Typography>
-              <Typography variant="h6">{`Username: ${user.username}`}</Typography>
-              <Typography variant="body1">{`Email: ${user.email}`}</Typography>
-              <Typography variant="body1">{`Role: ${user.role}`}</Typography>
+              <Typography variant="h6">{`Username: ${currentUser.username}`}</Typography>
+              <Typography variant="body1">{`Email: ${currentUser.email}`}</Typography>
+              <Typography variant="body1">{`Role: ${currentUser.role}`}</Typography>
             </>
           ) : (
             <Typography variant="body1">User not found</Typography>

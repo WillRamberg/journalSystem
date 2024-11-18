@@ -27,14 +27,14 @@ public class ConditionServices {
         UserDTO userDTO = userRepository.getUserById(conditionDTO.getUserId()).get().UserToDTO();
         conditionDTO.setUser(userDTO);
         Condition condition = conditionDTO.DTOtoCondition();
-        condition.setDate(LocalDateTime.now());
+        condition.setConditionDate(LocalDateTime.now());
         condition = conditionRepository.save(condition);
 
         return new ConditionDTO(
                 condition.getId(),
                 condition.getName(),
                 condition.getDescription(),
-                condition.getDate(),
+                condition.getConditionDate(),
                 condition.getUser().getId(),
                 condition.getUser().UserToDTO());
     }

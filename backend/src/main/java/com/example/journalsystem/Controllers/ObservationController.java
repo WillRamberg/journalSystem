@@ -24,7 +24,6 @@ public class ObservationController {
     @GetMapping("/getObservationsByUserId/{userId}")
     public ResponseEntity<List<ObservationDTO>> getObservationsByUserId(@PathVariable int userId) {
         List<Observation> observationsList = observationService.getAllObservationsById(userId);
-        System.out.println(observationsList);
         List<ObservationDTO> observationDTOList = observationsList.stream()
                 .map(observation -> {
                     User user = observation.getUser();

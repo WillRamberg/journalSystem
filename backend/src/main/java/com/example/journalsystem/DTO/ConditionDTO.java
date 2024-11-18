@@ -17,7 +17,7 @@ public class ConditionDTO {
     private int id;
     private String name;
     private String description;
-    private LocalDateTime date;
+    private LocalDateTime conditionDate;
     private int userId;
 
     private UserDTO user;
@@ -27,7 +27,7 @@ public class ConditionDTO {
         condition.setId(this.id);
         condition.setName(this.name);
         condition.setDescription(this.description);
-        condition.setDate(this.date);
+        condition.setConditionDate(this.conditionDate);
         condition.setUser(this.user.DTOtoUser());
         return condition;
     }

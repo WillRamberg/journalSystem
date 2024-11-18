@@ -3,6 +3,21 @@ import { AppBar, Toolbar, IconButton, Button, Drawer, Box, Paper, Typography, Gr
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 
+// Define the Observation and Condition interfaces
+interface Observation {
+  id: number;
+  name: string;
+  description: string;
+  observationDate: string;
+}
+
+interface Condition {
+  id: number;
+  name: string;
+  description: string;
+  conditionDate: string;
+}
+
 interface NavigationItem {
   text: string;
   route: string;
@@ -11,17 +26,44 @@ interface NavigationItem {
 const PatientInfoPage: React.FC = () => {
   const [user, setUser] = useState<any>(null); // Use 'any' type for simplicity
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [observations, setObservations] = useState<Observation[]>([]);
+  const [conditions, setConditions] = useState<Condition[]>([]);
   const navigate = useNavigate();
 
   // Fetch user information from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+
+      // Fetch observations and conditions for the logged-in user
+      fetchObservations(parsedUser.id);
+      fetchConditions(parsedUser.id);
     } else {
       navigate('/Login'); // Redirect to login if user is not found
     }
   }, [navigate]);
+
+  const fetchObservations = async (userId: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/getObservationsByUserId/${userId}`);
+      const data = await response.json();
+      setObservations(data);
+    } catch (error) {
+      console.error('Error fetching observations:', error);
+    }
+  };
+
+  const fetchConditions = async (userId: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/getConditionsByUserId/${userId}`);
+      const data = await response.json();
+      setConditions(data);
+    } catch (error) {
+      console.error('Error fetching conditions:', error);
+    }
+  };
 
   if (!user) {
     return null; // Render nothing if user is not loaded
@@ -49,7 +91,7 @@ const PatientInfoPage: React.FC = () => {
       );
     }
 
-    return items; // Make sure to return the array
+    return items;
   };
 
   const handleNavigation = (route: string) => {
@@ -74,7 +116,7 @@ const PatientInfoPage: React.FC = () => {
           <Typography variant="h6" style={{ flexGrow: 1 }}>
             Dashboard
           </Typography>
-          <Button color="inherit" onClick={handleLogout}>Log Out</Button> {/* Log Out button */}
+          <Button color="inherit" onClick={handleLogout}>Log Out</Button>
         </Toolbar>
       </AppBar>
 
@@ -83,7 +125,7 @@ const PatientInfoPage: React.FC = () => {
         <Box role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)} style={{ width: 250 }}>
           <List>
             {navigationItems().map((item) => (
-              <ListItem onClick={() => handleNavigation(item.route)}>
+              <ListItem key={item.route} onClick={() => handleNavigation(item.route)}>
                 <ListItemText primary={item.text} />
               </ListItem>
             ))}
@@ -127,6 +169,49 @@ const PatientInfoPage: React.FC = () => {
             </Grid>
           </Grid>
         </Paper>
+
+        {/* Observations and Conditions Display */}
+        <Grid container spacing={3} style={{ marginTop: '20px' }}>
+          {/* Observations Container */}
+          <Grid item xs={12} md={6}>
+            <Paper elevation={3} style={{ padding: '20px' }}>
+              <Typography variant="h4" gutterBottom>Observations</Typography>
+              {observations.length > 0 ? (
+                observations.map((obs) => (
+                  <Paper key={obs.id} style={{ padding: '10px', marginBottom: '10px' }}>
+                    <Typography variant="h6">{obs.name}</Typography>
+                    <Typography variant="body2">{obs.description}</Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      Observation Date: {new Date(obs.observationDate).toLocaleDateString()}
+                    </Typography>
+                  </Paper>
+                ))
+              ) : (
+                <Typography variant="body1">No observations found.</Typography>
+              )}
+            </Paper>
+          </Grid>
+
+          {/* Conditions Container */}
+          <Grid item xs={12} md={6}>
+            <Paper elevation={3} style={{ padding: '20px' }}>
+              <Typography variant="h4" gutterBottom>Conditions</Typography>
+              {conditions.length > 0 ? (
+                conditions.map((cond) => (
+                  <Paper key={cond.id} style={{ padding: '10px', marginBottom: '10px' }}>
+                    <Typography variant="h6">{cond.name}</Typography>
+                    <Typography variant="body2">{cond.description}</Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      Condition Date: {new Date(cond.conditionDate).toLocaleDateString()}
+                    </Typography>
+                  </Paper>
+                ))
+              ) : (
+                <Typography variant="body1">No conditions found.</Typography>
+              )}
+            </Paper>
+          </Grid>
+        </Grid>
       </Container>
     </>
   );

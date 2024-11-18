@@ -18,7 +18,7 @@ public class Condition {
     private int id;
     private String name;
     private String description;
-    private LocalDateTime date;
+    private LocalDateTime conditionDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id") // Definierar foreign key
@@ -30,7 +30,7 @@ public class Condition {
       conditionDTO.setName(this.name);
       conditionDTO.setDescription(this.description);
       conditionDTO.setUserId(user.getId());
-      conditionDTO.setDate(this.date);
+      conditionDTO.setConditionDate(this.conditionDate);
       conditionDTO.setUser(user.UserToDTO());
       return conditionDTO;
     }
