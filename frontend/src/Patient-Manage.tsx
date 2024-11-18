@@ -109,7 +109,7 @@ const PatientManagement: React.FC = () => {
   const navigationItems = (): NavigationItem[] => {
     const items: NavigationItem[] = [];
 
-    if (currentUser?.role === 'DOCTOR' || currentUser?.role === 'STAFF') {
+    if (user?.role === 'DOCTOR' || user?.role === 'STAFF') {
       items.push(
         { text: 'View All Patients', route: '/Patient-Index' },
         { text: 'View My Information', route: '/Patient-Info' },
@@ -117,7 +117,7 @@ const PatientManagement: React.FC = () => {
       );
     }
 
-    if (currentUser?.role === 'PATIENT') {
+    if (user?.role === 'PATIENT') {
       items.push(
         { text: 'View My Information', route: '/Patient-info' },
         { text: 'Send Message to Doctor or Staff', route: '/Messages' }
