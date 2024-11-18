@@ -67,9 +67,9 @@ const PatientManagement: React.FC = () => {
         navigate('/Login'); // Redirect to login if no userId in the URL
       }
     };
-    
+
     fetchUserDetails();
-}, [navigate, parsedUserId]);
+  }, [navigate, parsedUserId]);
 
   // Fetch observations and conditions for the specific user
   useEffect(() => {
@@ -139,7 +139,7 @@ const PatientManagement: React.FC = () => {
 
   const handleAddObservation = async () => {
     try {
-      const response = await fetch('http://localhost:8080/saveObservation', {
+      const response = await fetch(`http://localhost:8080/saveObservation/${parsedUserId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ const PatientManagement: React.FC = () => {
 
   const handleAddCondition = async () => {
     try {
-      const response = await fetch('http://localhost:8080/saveCondition', {
+      const response = await fetch(`http://localhost:8080/saveCondition/${parsedUserId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -253,7 +253,7 @@ const PatientManagement: React.FC = () => {
               ) : (
                 <Typography variant="body1">No observations found.</Typography>
               )}
-              
+
               <Typography variant="h4" gutterBottom>Add New Observation</Typography>
               <TextField
                 label="Name"
@@ -273,7 +273,7 @@ const PatientManagement: React.FC = () => {
                 value={newObservation.description}
                 onChange={(e) => setNewObservation({ ...newObservation, description: e.target.value })}
               />
-              
+
               <Button variant="contained" color="primary" onClick={handleAddObservation}>
                 Add Observation
               </Button>
@@ -297,7 +297,7 @@ const PatientManagement: React.FC = () => {
               ) : (
                 <Typography variant="body1">No conditions found.</Typography>
               )}
-              
+
               <Typography variant="h4" gutterBottom>Add New Condition</Typography>
               <TextField
                 label="Name"
@@ -317,7 +317,7 @@ const PatientManagement: React.FC = () => {
                 value={newCondition.description}
                 onChange={(e) => setNewCondition({ ...newCondition, description: e.target.value })}
               />
-              
+
               <Button variant="contained" color="primary" onClick={handleAddCondition}>
                 Add Condition
               </Button>
