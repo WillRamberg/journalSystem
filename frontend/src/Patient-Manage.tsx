@@ -139,7 +139,7 @@ const PatientManagement: React.FC = () => {
 
   const handleAddObservation = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/saveObservation/${parsedUserId}`, {
+      const response = await fetch(`http://localhost:8080/saveObservation`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ const PatientManagement: React.FC = () => {
 
   const handleAddCondition = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/saveCondition/${parsedUserId}`, {
+      const response = await fetch(`http://localhost:8080/saveCondition`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
